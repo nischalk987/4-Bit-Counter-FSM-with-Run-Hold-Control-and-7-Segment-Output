@@ -18,28 +18,28 @@ The following grids use 1 and 0 entries in the Gray-code arrangement above. Read
 
 ### Segment a
 
-![Segment a K-map, minterms, and minimized SOP](Segment_a_Plain1.png)
+![Segment a K-map, minterms, and minimized SOP](docs/kmap-visuals/Segment_a_Plain1.png)
 
 ### Segment b
 
-![Segment b K-map, minterms, and minimized SOP](Segment_b_Plain.png)
+![Segment b K-map, minterms, and minimized SOP](docs/kmap-visuals/Segment_b_Plain.png)
 
 ### Segment c
 
-![Segment c K-map, minterms, and minimized SOP](Segment_c_Plain.png)
+![Segment c K-map, minterms, and minimized SOP](docs/kmap-visuals/Segment_c_Plain.png)
 
 ### Segment d
 
-![Segment d K-map, minterms, and minimized SOP](Segment_d_Plain.png)
+![Segment d K-map, minterms, and minimized SOP](docs/kmap-visuals/Segment_d_Plain.png)
 
 ### Segment e
 
-![Segment e K-map, minterms, and minimized SOP](Segment_e_Plain.png)
+![Segment e K-map, minterms, and minimized SOP](docs/kmap-visuals/Segment_e_Plain.png)
 
 ### Segment f
 
-![Segment f K-map, minterms, and minimized SOP](Segment_f_Plain.png)
+![Segment f K-map, minterms, and minimized SOP](docs/kmap-visuals/Segment_f_Plain.png)
 
 ### Segment g
 
-![Segment g K-map, minterms, and minimized SOP](Segment_g_Plain.png)
+![Segment g K-map, minterms, and minimized SOP](docs/kmap-visuals/Segment_g_Plain.png)
