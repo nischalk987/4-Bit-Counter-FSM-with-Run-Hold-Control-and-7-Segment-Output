@@ -10,6 +10,8 @@ Let the 4-bit input be (D C B A), where (D) is the most significant bit and (A) 
 
 ### Segment Truth Table
 
+![7-Segment Decoder Truth Table](7-Segment_Truth_Table_Plain.png)
+
 | Hex | D | C | B | A | a | b | c | d | e | f | g |
 |---:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 1 | 1 | 1 | 1 | 0 |
