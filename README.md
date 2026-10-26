@@ -119,17 +119,16 @@ The following grids use 1 and 0 entries in the Gray-code arrangement above. Read
 | 11 | 0 | 1 | 1 | 1 |
 | 10 | 1 | 1 | 1 | 1 |
 
-### Simplified Boolean Expressions
+### Simplified Boolean Expressions (SOP)
 
-These expressions are to be validated against the truth table and the grouping choices in the K-maps before using them in the decoder implementation.
+Using the minterms listed above and variables ordered as D (MSB), C, B, A (LSB), the minimized sum-of-products expressions are:
 
-- (a = D + B + AC + \overline{A}\,\overline{C} + \overline{B}\,\overline{C}\)
-- (b = \overline{C} + \overline{A}\,\overline{B} + AB + \overline{D}C)
-- (c = A + C + \overline{B})
-- (d = B\overline{C} + A\overline{C} + \overline{A}B + \overline{B}C + \overline{D}\,\overline{A}\)
-- (e = \overline{A}\,\overline{C} + B\overline{C} + D\overline{B} + \overline{A}D + \overline{B}\,\overline{C})
-- (f = D + \overline{A}\,\overline{B} + C\overline{A} + C\overline{B} + \overline{C}\,\overline{B})
-- (g = D + A\overline{B} + B\overline{A} + C\overline{A} + C\overline{B})
+- **a** = BC + B\overline{D} + D\overline{A} + \overline{A}\overline{C} + AC\overline{D} + D\overline{B}\overline{C}
+- **b** = \overline{A}\overline{C} + \overline{C}\overline{D} + AB\overline{D} + AD\overline{B} + \overline{A}\overline{B}\overline{D}
+- **c** = A\overline{B} + A\overline{D} + C\overline{D} + D\overline{C} + \overline{B}\overline{D}
+- **d** = D\overline{B} + AB\overline{C} + AC\overline{B} + BC\overline{A} + \overline{A}\overline{C}\overline{D}
+- **e** = BD + CD + B\overline{A} + \overline{A}\overline{C}
+- **f** = BD + C\overline{A} + D\overline{C} + \overline{A}\overline{B} + C\overline{B}\overline{D}
+- **g** = AD + B\overline{A} + B\overline{C} + D\overline{C} + C\overline{B}\overline{D}
 
-> **Note:** The Boolean expressions above should be checked by deriving them from the displayed K-map grids. Do not treat them as verified minimum expressions until validated.
-
+**Important:** These are SOP minimizations of the minterm lists above. The K-map grids and minterm lists must agree; use the minterm lists as the source when filling the grids.
