@@ -41,12 +41,7 @@ The following grids use 1 and 0 entries in the Gray-code arrangement above. Read
 
 #### Segment a
 
-| DC \ BA | 00 | 01 | 11 | 10 |
-|:---:|:---:|:---:|:---:|:---:|
-| 00 | 1 | 0 | 1 | 1 |
-| 01 | 0 | 1 | 1 | 1 |
-| 11 | 1 | 0 | 1 | 1 |
-| 10 | 1 | 1 | 0 | 1 |
+![Segment a K-map, minterms, and minimized SOP](Segment_a_Plain1.png)
 
 #### Segment b
 
