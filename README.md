@@ -1,86 +1,135 @@
 # 4-Bit Counter FSM with RUN/HOLD Control and 7-Segment Output
 
-## Project Overview
+## 7-Segment Decoder: Karnaugh Maps (K-Maps)
 
-This project implements a 4-bit counter with RUN/HOLD control using Verilog HDL. The counter increments on each active clock edge when `run = 1` and holds its current value when `run = 0`. A 7-segment decoder displays the counter value.
+This section documents the K-map simplification for each segment output of the common-cathode 7-segment display decoder.
 
-## Features
+### Inputs and Outputs
 
-- 4-bit counter with values from 0 to 15
-- RUN/HOLD control input
-- Synchronous reset to zero
-- 7-segment display decoder for hexadecimal values 0–F
-- Modular Verilog design
+Let the 4-bit input be (D C B A), where (D) is the most significant bit and (A) is the least significant bit. The seven active-high outputs are (a,b,c,d,e,f,g).
 
-## FSM State Diagram
+### Segment Truth Table
 
-```mermaid
-stateDiagram-v2
-    [*] --> RUN: Reset
-    RUN --> RUN: run = 1
-    RUN --> HOLD: run = 0
-    HOLD --> HOLD: run = 0
-    HOLD --> RUN: run = 1
-```
+| Hex | D | C | B | A | a | b | c | d | e | f | g |
+|---:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+| 0 | 0 | 0 | 0 | 0 | 1 | 1 | 1 | 1 | 1 | 1 | 0 |
+| 1 | 0 | 0 | 0 | 1 | 0 | 1 | 1 | 0 | 0 | 0 | 0 |
+| 2 | 0 | 0 | 1 | 0 | 1 | 1 | 0 | 1 | 1 | 0 | 1 |
+| 3 | 0 | 0 | 1 | 1 | 1 | 1 | 1 | 1 | 0 | 0 | 1 |
+| 4 | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 1 | 1 |
+| 5 | 0 | 1 | 0 | 1 | 1 | 0 | 1 | 1 | 0 | 1 | 1 |
+| 6 | 0 | 1 | 1 | 0 | 1 | 0 | 1 | 1 | 1 | 1 | 1 |
+| 7 | 0 | 1 | 1 | 1 | 1 | 1 | 1 | 0 | 0 | 0 | 0 |
+| 8 | 1 | 0 | 0 | 0 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
+| 9 | 1 | 0 | 0 | 1 | 1 | 1 | 1 | 1 | 0 | 1 | 1 |
+| A | 1 | 0 | 1 | 0 | 1 | 1 | 1 | 0 | 1 | 1 | 1 |
+| b | 1 | 0 | 1 | 1 | 0 | 0 | 1 | 1 | 1 | 1 | 1 |
+| C | 1 | 1 | 0 | 0 | 1 | 0 | 0 | 1 | 1 | 1 | 0 |
+| d | 1 | 1 | 0 | 1 | 0 | 1 | 1 | 1 | 1 | 0 | 1 |
+| E | 1 | 1 | 1 | 0 | 1 | 0 | 0 | 1 | 1 | 1 | 1 |
+| F | 1 | 1 | 1 | 1 | 1 | 0 | 0 | 0 | 1 | 1 | 1 |
 
-## System Architecture
+### Minterms for Each Segment
 
-The design consists of two main modules:
+Using the truth table above, the minterms where each active-high segment is 1 are:
 
-1. **`counter_fsm_7seg`** — maintains the 4-bit count, applies reset, and increments the count only when RUN is enabled.
-2. **`hex_to_7seg`** — decodes the 4-bit counter value into seven active-high segment signals for a common-cathode display.
+- (a(D,C,B,A)=\Sigma m(0,2,3,5,6,7,8,9,10,12,14,15))
+- (b(D,C,B,A)=\Sigma m(0,1,2,3,4,7,8,9,10,13))
+- (c(D,C,B,A)=\Sigma m(0,1,3,4,5,6,7,8,9,10,11,13))
+- (d(D,C,B,A)=\Sigma m(0,2,3,5,6,8,9,11,12,13,14))
+- (e(D,C,B,A)=\Sigma m(0,2,6,8,10,11,12,13,14,15))
+- (f(D,C,B,A)=\Sigma m(0,4,5,6,8,9,10,11,12,14,15))
+- (g(D,C,B,A)=\Sigma m(2,3,4,5,6,8,9,10,11,13,14,15))
 
-### Block-Level Flow
+### Four-Variable K-Map Layout
 
-```text
-Clock, Reset, RUN
-       |
-       v
-4-bit Counter / RUN-HOLD Control
-       |
-       v
-Hex-to-7-Segment Decoder
-       |
-       v
-7-Segment Display (a–g)
-```
+Use Gray-code order for rows (DC = 00,01,11,10) and columns (BA = 00,01,11,10). Fill each cell with the corresponding output from the truth table for the selected segment.
 
-## State Behavior
+| DC \ BA | 00 | 01 | 11 | 10 |
+|:---:|:---:|:---:|:---:|:---:|
+| 00 | m0 | m1 | m3 | m2 |
+| 01 | m4 | m5 | m7 | m6 |
+| 11 | m12 | m13 | m15 | m14 |
+| 10 | m8 | m9 | m11 | m10 |
 
-| Current State | RUN Input | Next State | Counter Behavior |
-|---|---:|---|---|
-| RUN | 1 | RUN | Increment on the next active clock edge |
-| RUN | 0 | HOLD | Retain current count |
-| HOLD | 0 | HOLD | Retain current count |
-| HOLD | 1 | RUN | Resume counting |
+### K-Map Grids
 
-Reset synchronously clears the counter to `0000`.
+The following grids use 1 and 0 entries in the Gray-code arrangement above. Read each grid as one segment's K-map.
 
-## Output
+#### Segment a
 
-The counter output is a 4-bit value (`count[3:0]`). The decoder maps the values 0–F to seven segment signals. In this design, the segment vector is `seg[6:0] = g,f,e,d,c,b,a`, and outputs are active-high for a common-cathode display.
+| DC \ BA | 00 | 01 | 11 | 10 |
+|:---:|:---:|:---:|:---:|:---:|
+| 00 | 1 | 0 | 1 | 1 |
+| 01 | 0 | 1 | 1 | 1 |
+| 11 | 1 | 0 | 1 | 1 |
+| 10 | 1 | 1 | 0 | 1 |
 
-## Repository Files
+#### Segment b
 
-- `counter_fsm_7seg.v` — counter and RUN/HOLD logic
-- `hex_to_7seg.v` — 7-segment decoder
-- `alu_tb.v` / testbench file — testbench file name may vary; use the testbench included in the repository
+| DC \ BA | 00 | 01 | 11 | 10 |
+|:---:|:---:|:---:|:---:|:---:|
+| 00 | 1 | 1 | 1 | 1 |
+| 01 | 1 | 0 | 1 | 0 |
+| 11 | 0 | 1 | 0 | 0 |
+| 10 | 1 | 1 | 0 | 1 |
 
-## Simulation
+#### Segment c
 
-Using Icarus Verilog, compile the design and the testbench (adjust the testbench filename to match the file in the repository):
+| DC \ BA | 00 | 01 | 11 | 10 |
+|:---:|:---:|:---:|:---:|:---:|
+| 00 | 1 | 1 | 1 | 0 |
+| 01 | 1 | 1 | 1 | 1 |
+| 11 | 0 | 1 | 0 | 0 |
+| 10 | 1 | 1 | 1 | 1 |
 
-```bash
-iverilog -o counter_sim counter_fsm_7seg.v hex_to_7seg.v <testbench_file>.v
-vvp counter_sim
-```
+#### Segment d
 
-Open the generated VCD file in GTKWave if the testbench writes one.
+| DC \ BA | 00 | 01 | 11 | 10 |
+|:---:|:---:|:---:|:---:|:---:|
+| 00 | 1 | 0 | 1 | 1 |
+| 01 | 0 | 1 | 0 | 1 |
+| 11 | 1 | 1 | 0 | 1 |
+| 10 | 1 | 1 | 1 | 0 |
 
-## Notes
+#### Segment e
 
-- The displayed number changes only on the active clock edge.
-- With RUN disabled, the counter holds its value.
-- The reset is synchronous, so it is sampled at the active clock edge.
-- The state diagram represents RUN/HOLD behavior; the counter's 4-bit value is the stored count.
+| DC \ BA | 00 | 01 | 11 | 10 |
+|:---:|:---:|:---:|:---:|:---:|
+| 00 | 1 | 0 | 0 | 1 |
+| 01 | 0 | 0 | 0 | 1 |
+| 11 | 1 | 1 | 0 | 1 |
+| 10 | 1 | 0 | 1 | 1 |
+
+#### Segment f
+
+| DC \ BA | 00 | 01 | 11 | 10 |
+|:---:|:---:|:---:|:---:|:---:|
+| 00 | 1 | 0 | 0 | 0 |
+| 01 | 1 | 1 | 0 | 1 |
+| 11 | 1 | 0 | 1 | 1 |
+| 10 | 1 | 1 | 1 | 1 |
+
+#### Segment g
+
+| DC \ BA | 00 | 01 | 11 | 10 |
+|:---:|:---:|:---:|:---:|:---:|
+| 00 | 0 | 0 | 1 | 1 |
+| 01 | 1 | 1 | 0 | 1 |
+| 11 | 0 | 1 | 1 | 1 |
+| 10 | 1 | 1 | 1 | 1 |
+
+### Simplified Boolean Expressions
+
+These expressions are to be validated against the truth table and the grouping choices in the K-maps before using them in the decoder implementation.
+
+- (a = D + B + AC + \overline{A}\,\overline{C} + \overline{B}\,\overline{C}\)
+- (b = \overline{C} + \overline{A}\,\overline{B} + AB + \overline{D}C)
+- (c = A + C + \overline{B})
+- (d = B\overline{C} + A\overline{C} + \overline{A}B + \overline{B}C + \overline{D}\,\overline{A}\)
+- (e = \overline{A}\,\overline{C} + B\overline{C} + D\overline{B} + \overline{A}D + \overline{B}\,\overline{C})
+- (f = D + \overline{A}\,\overline{B} + C\overline{A} + C\overline{B} + \overline{C}\,\overline{B})
+- (g = D + A\overline{B} + B\overline{A} + C\overline{A} + C\overline{B})
+
+> **Note:** The Boolean expressions above should be checked by deriving them from the displayed K-map grids. Do not treat them as verified minimum expressions until validated.
 
